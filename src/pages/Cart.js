@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Cart = ({ cartItems, onQuantityChange, totalAmount, onPurchase }) => {
+const Cart = ({ cartItems, onQuantityChange, onRemoveFromCart, totalAmount, onPurchase }) => {
   return (
     <div className="max-w-4xl mx-auto mt-8">
       <h1 className="text-xl font-semibold mb-4">Cart</h1>
@@ -25,6 +25,12 @@ const Cart = ({ cartItems, onQuantityChange, totalAmount, onPurchase }) => {
                 className="px-2 py-1 bg-gray-300 rounded-md"
               >
                 +
+              </button>
+              <button
+                onClick={() => onRemoveFromCart(item.id)}
+                className="ml-4 px-2 py-1 bg-red-500 text-white rounded-md"
+              >
+                Remove
               </button>
             </div>
           </li>

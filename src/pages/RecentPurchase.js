@@ -1,33 +1,47 @@
-import React, { useEffect, useState } from 'react'
-import {listPurchases} from '../services/api'
-
+import React, { useEffect, useState } from 'react';
+import { listPurchases } from '../services/api';
 
 const RecentPurchase = () => {
-  const [sales, getRecent] = useState([])
+  const [sales, setSales] = useState([]);
 
   useEffect(() => {
     listPurchases().then((response) => {
-      getRecent(response.data);
-    })
-  },[])
+      setSales(response.data);
+    });
+  }, []);
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="max-w-4xl mx-auto mt-8">
-      <h1 className="text-xl font-semibold mb-4">Products</h1>
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sales.map((recent) => (
-          <li
-            key={recent.id}
-            className="bg-white shadow-md rounded-lg p-4 cursor-pointer"
-           
-          >
-            <h2 className="text-lg font-semibold mb-2">{recent.product}</h2>
-            <p className="text-lg font-bold">${recent.total_amount}</p>
-            <p className="text-lg font-bold">Quantity:{recent.quantity}</p>
-            <p className="text-gray-500">Date: {recent.date}</p>
-          </li>
-        ))}
-      </ul>
+      <h1 className="text-xl font-semibold mb-4">Recent Purchases</h1>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="text-left py-2 px-4 font-semibold text-sm">Product</th>
+              <th className="text-left py-2 px-4 font-semibold text-sm">Total Amount</th>
+              <th className="text-left py-2 px-4 font-semibold text-sm">Quantity</th>
+              <th className="text-left py-2 px-4 font-semibold text-sm">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sales.map((recent) => (
+              <tr key={recent.id} className="hover:bg-gray-100">
+                <td className="py-2 px-4">{recent.product_name}</td>
+                <td className="py-2 px-4">${recent.total_amount}</td>
+                <td className="py-2 px-4">{recent.quantity}</td>
+                <td className="py-2 px-4">{formatDate(recent.date)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-}
-export default RecentPurchase
+};
+
+export default RecentPurchase;
